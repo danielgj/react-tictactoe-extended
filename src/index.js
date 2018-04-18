@@ -28,25 +28,25 @@ function Square(props) {
     }
   
     render() {
-      return (
-        <div>
-          <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div>
-        </div>
-      );
+    
+        function getIndex(r,c) {            
+            return c + 3*(r%3);
+        }
+          
+        return (
+            <div>            
+              {[...Array(3)].map((x, i) =>
+                <div className="board-row" key={"row_" + i}>
+                  {[...Array(3)].map((y, j) =>
+                    <span 
+                        key={"row_" + i + "_col_" + j}>
+                        {this.renderSquare(getIndex(i,j))}
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+        );     
     }
   }
   

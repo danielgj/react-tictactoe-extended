@@ -61,6 +61,7 @@ function Square(props) {
         ],
         lastCell: null,
         movements: [],
+        showAscending: true,
         stepNumber: 0,
         xIsNext: true
       };
@@ -94,12 +95,20 @@ function Square(props) {
         xIsNext: (step % 2) === 0
       });
     }
-  
+    
+    toggleList() {
+        const ascending  = this.state.showAscending;
+        this.setState({
+            showAscending: !ascending
+        });      
+    }
+
     render() {
       const lastCell = this.state.lastCell;    
       const history = this.state.history;
       const movements = this.state.movements;
       const current = history[this.state.stepNumber];
+      const ascending = this.state.showAscending;    
       const winner = calculateWinner(current.squares);
   
       const moves = history.map((step, move) => {
@@ -131,7 +140,8 @@ function Square(props) {
           </div>
           <div className="game-info">
             <div>{status}</div>
-            <ol>{moves}</ol>
+            <ol>{ascending?moves:moves.reverse()}</ol>
+            <button onClick={() => this.toggleList()}>Toggle List</button>
           </div>
         </div>
       );

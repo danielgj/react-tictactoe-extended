@@ -17,7 +17,10 @@ function Square(props) {
       if(this.props.lastCell === i) {
         currentClassName += " current";
       }
-        
+      if(this.props.winner.winningLine.includes(i)) {
+        currentClassName += " winnerSquare";
+      }
+     
       return (
         <Square
           className={currentClassName}
@@ -72,7 +75,7 @@ function Square(props) {
       const movements = this.state.movements;
       const current = history[history.length - 1];
       const squares = current.squares.slice();
-      if (calculateWinner(squares) || squares[i]) {
+      if (calculateWinner(squares).winner || squares[i]) {
         return;
       }
       squares[i] = this.state.xIsNext ? "X" : "O";
@@ -123,8 +126,8 @@ function Square(props) {
       });
   
       let status;
-      if (winner) {
-        status = "Winner: " + winner;
+      if (winner.winner) {
+        status = "Winner: " + winner.winner;
       } else {
         status = "Next player: " + (this.state.xIsNext ? "X" : "O");
       }
@@ -135,6 +138,7 @@ function Square(props) {
             <Board
               lastCell={lastCell}
               squares={current.squares}
+              winner={winner}
               onClick={i => this.handleClick(i)}
             />
           </div>
@@ -161,15 +165,15 @@ function Square(props) {
       [1, 4, 7],
       [2, 5, 8],
       [0, 4, 8],
-      [2, 4, 6]
+      [2, 4, 6],
     ];
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return squares[a];
+        return {"winner": squares[a], "winningLine": [a, b, c]}
       }
     }
-    return null;
+    return {"winner": null, "winningLine": [null, null, null]};
   }
 
   function calculateMovementBySquare(i) {

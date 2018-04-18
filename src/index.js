@@ -4,7 +4,7 @@ import './index.css';
 
 function Square(props) {
     return (
-      <button className="square" onClick={props.onClick}>
+      <button className={props.className} onClick={props.onClick}>
         {props.value}
       </button>
     );
@@ -12,8 +12,15 @@ function Square(props) {
   
   class Board extends React.Component {
     renderSquare(i) {
+
+      let  currentClassName = "square";
+      if(this.props.lastCell === i) {
+        currentClassName += " current";
+      }
+        
       return (
         <Square
+          className={currentClassName}
           value={this.props.squares[i]}
           onClick={() => this.props.onClick(i)}
         />
@@ -52,6 +59,7 @@ function Square(props) {
             squares: Array(9).fill(null)
           }
         ],
+        lastCell: null,
         movements: [],
         stepNumber: 0,
         xIsNext: true
@@ -73,6 +81,7 @@ function Square(props) {
             squares: squares
           }
         ]),
+        lastCell: i,
         movements: movements.concat([calculateMovementBySquare(i)]),
         stepNumber: history.length,
         xIsNext: !this.state.xIsNext
@@ -87,6 +96,7 @@ function Square(props) {
     }
   
     render() {
+      const lastCell = this.state.lastCell;    
       const history = this.state.history;
       const movements = this.state.movements;
       const current = history[this.state.stepNumber];
@@ -114,6 +124,7 @@ function Square(props) {
         <div className="game">
           <div className="game-board">
             <Board
+              lastCell={lastCell}
               squares={current.squares}
               onClick={i => this.handleClick(i)}
             />

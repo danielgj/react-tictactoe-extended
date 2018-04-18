@@ -128,6 +128,8 @@ function Square(props) {
       let status;
       if (winner.winner) {
         status = "Winner: " + winner.winner;
+      } else if(this.state.stepNumber === 9) {
+        status = 'Result being Draw'
       } else {
         status = "Next player: " + (this.state.xIsNext ? "X" : "O");
       }
